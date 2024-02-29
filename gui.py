@@ -15,11 +15,23 @@ def main(page: Page):
     page.title = "Bill Creation Tool"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+    page.bgcolor = ft.colors.INDIGO_300
+    page.window_width = 800
+    page.window_height = 700
 
     selected_file_name = Text()
     selected_path = Text()
     output_path = Text()
-    txt_name = TextField(label="Your file name")
+    txt_name = TextField(hint_text="Enter file name here", border="none")
+    welcome_text = Text("Welcome to Bill Creation Tool:\n "
+                        "- just pick a file\n"
+                        "- then choose the output folder\n"
+                        "- enter the name of the bill\n "
+                        "- and finally hit Create Bill",
+                        size=20,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.JUSTIFY,
+                        font_family="Courier New")
 
     def pick_input_file(e: FilePickerResultEvent):
         if e.files:
@@ -36,20 +48,22 @@ def main(page: Page):
     get_directory_dialog = FilePicker(on_result=get_output_directory)
 
     def output_filename(e: TextField):
-        if not txt_name.value:
-            txt_name.error_text = "Please enter your file name"
-            page.update()
-        else:
-            output_file_name = txt_name.value
-            input_doc_path = selected_path.value
-            output_doc_path = output_path.value
+        output_file_name = txt_name.value
+        input_doc_path = selected_path.value
+        output_doc_path = output_path.value
 
-            word_doc = CreateWordDoc(input_doc_path, output_doc_path, output_file_name)
-            word_doc.create_bill()
+        word_doc = CreateWordDoc(input_doc_path, output_doc_path, output_file_name)
+        word_doc.create_bill()
 
     page.overlay.extend([pick_files_dialog, get_directory_dialog])
 
     page.add(
+        ft.Container(
+            content=welcome_text,
+            alignment=ft.alignment.center,
+            margin=20,
+            padding=10
+        ),
         Row(
             [
                 ft.Container(
@@ -70,7 +84,7 @@ def main(page: Page):
                 ft.Container(
                     content=selected_file_name,
                     alignment=ft.alignment.center,
-                    bgcolor=ft.colors.GREEN_50,
+                    bgcolor=ft.colors.WHITE,
                     width=500,
                     height=50,
                     border_radius=10,
@@ -98,7 +112,7 @@ def main(page: Page):
                 ft.Container(
                     content=output_path,
                     alignment=ft.alignment.center,
-                    bgcolor=ft.colors.BLUE_50,
+                    bgcolor=ft.colors.WHITE,
                     width=500,
                     height=50,
                     border_radius=10,
@@ -125,9 +139,11 @@ def main(page: Page):
                 ft.Container(
                     content=txt_name,
                     alignment=ft.alignment.center,
-                    bgcolor=ft.colors.INDIGO_50,
+                    bgcolor=ft.colors.WHITE,
+                    padding=10,
                     width=500,
                     height=50,
+                    border_radius=10
                 ),
             ],
         ),
