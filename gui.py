@@ -9,7 +9,7 @@ from flet import (
     TextField,
     icons,
 )
-
+from createWordDoc import CreateWordDoc
 
 def main(page: Page):
     page.title = "Bill Creation Tool"
@@ -26,24 +26,29 @@ def main(page: Page):
             selected_file_name.value = e.files[0].name
             selected_file_name.update()
             selected_path.value =  e.files[0].path
-            print(selected_path.value)
 
     pick_files_dialog = FilePicker(on_result=pick_input_file)
 
     def get_output_directory(e: FilePickerResultEvent):
         output_path.value = e.path
+        #print("####Output directory: ", output_path.value)
         output_path.update()
 
     get_directory_dialog = FilePicker(on_result=get_output_directory)
 
-    def filename_input(e):
+    def output_filename(e: TextField):
         if not txt_name.value:
             txt_name.error_text = "Please enter your file name"
             page.update()
         else:
-            name = txt_name.value
-            page.clean()
-            page.add(ft.Text(f"Test, {name}!"))
+            output_file_name = txt_name.value
+            input_doc_path = selected_path.value
+            output_doc_path = output_path.value
+            print("output_doc_path", output_doc_path)
+            print("input_doc_path", input_doc_path)
+            print(output_file_name)
+            word_doc = CreateWordDoc(input_doc_path, output_doc_path, output_file_name)
+            word_doc.create_bill()
 
     page.overlay.extend([pick_files_dialog, get_directory_dialog])
 
@@ -109,7 +114,7 @@ def main(page: Page):
                     ElevatedButton(
                         "Create Bill",
                         icon=icons.CREATE_OUTLINED,
-                        on_click=filename_input,
+                        on_click=output_filename,
                         disabled=page.web,
                     ),
                     margin=10,
@@ -131,5 +136,5 @@ def main(page: Page):
         ),
     )
 
-
 ft.app(target=main)
+

@@ -6,11 +6,11 @@ from wordReader import WordReader
 
 
 class CreateWordDoc(WordReader):
-    def __init__(self, document: str, directory_path: str):
-        super().__init__(document)
+    def __init__(self, input_document: str, output_directory_path: str, output_file_name: str):
+        super().__init__(input_document)
         self.doc = Document()
-        self.output_path = directory_path
-        self.output_file_name = "testl123.docx"
+        self.output_path = output_directory_path
+        self.output_file_name = output_file_name
         self.font_name = 'Montserrat'
         self.font_size_6 = 6
         self.font_size_8 = 8

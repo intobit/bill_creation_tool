@@ -2,8 +2,8 @@ from docx import Document
 
 
 class WordReader:
-    def __init__(self, document: str):
-        self.document = document
+    def __init__(self, input_document: str):
+        self.document = input_document
 
     def get_company_data(self):
         doc = Document(self.document)
@@ -58,3 +58,5 @@ class WordReader:
             total += int(value)
         final_price = round(total * price, 2)
         return final_price
+
+
