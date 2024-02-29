@@ -31,7 +31,6 @@ def main(page: Page):
 
     def get_output_directory(e: FilePickerResultEvent):
         output_path.value = e.path
-        #print("####Output directory: ", output_path.value)
         output_path.update()
 
     get_directory_dialog = FilePicker(on_result=get_output_directory)
@@ -44,9 +43,7 @@ def main(page: Page):
             output_file_name = txt_name.value
             input_doc_path = selected_path.value
             output_doc_path = output_path.value
-            print("output_doc_path", output_doc_path)
-            print("input_doc_path", input_doc_path)
-            print(output_file_name)
+
             word_doc = CreateWordDoc(input_doc_path, output_doc_path, output_file_name)
             word_doc.create_bill()
 
