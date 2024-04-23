@@ -2,10 +2,10 @@ import os
 from docx import Document
 from docx.shared import Cm, Pt
 from datetime import datetime
-from pfd_reader import PFDReader
+from pdf_reader import PdfReader
 
 
-class CreateWordDoc(PFDReader):
+class CreateWordDoc(PdfReader):
     def __init__(self, path_to_pdf: str, output_directory_path: str, output_file_name: str):
         super().__init__(path_to_pdf)
         self.doc = Document()

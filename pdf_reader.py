@@ -2,7 +2,7 @@ import fitz
 import re
 
 
-class PFDReader:
+class PdfReader:
     def __init__(self, path_to_pdf: str):
         self.file = path_to_pdf
         self.open_file = fitz.open(self.file)
