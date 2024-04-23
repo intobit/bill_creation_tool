@@ -9,7 +9,8 @@ from flet import (
     TextField,
     icons,
 )
-from createWordDoc import CreateWordDoc
+from create_word_doc import CreateWordDoc
+
 
 def main(page: Page):
     page.title = "Bill Creation Tool"
@@ -37,7 +38,7 @@ def main(page: Page):
         if e.files:
             selected_file_name.value = e.files[0].name
             selected_file_name.update()
-            selected_path.value =  e.files[0].path
+            selected_path.value = e.files[0].path
 
     pick_files_dialog = FilePicker(on_result=pick_input_file)
 
@@ -49,10 +50,10 @@ def main(page: Page):
 
     def output_filename(e: TextField):
         output_file_name = txt_name.value
-        input_doc_path = selected_path.value
+        input_pdf_path = selected_path.value
         output_doc_path = output_path.value
 
-        word_doc = CreateWordDoc(input_doc_path, output_doc_path, output_file_name)
+        word_doc = CreateWordDoc(input_pdf_path, output_doc_path, output_file_name)
         word_doc.create_bill()
 
     page.overlay.extend([pick_files_dialog, get_directory_dialog])
@@ -148,6 +149,7 @@ def main(page: Page):
             ],
         ),
     )
+
 
 ft.app(target=main)
 

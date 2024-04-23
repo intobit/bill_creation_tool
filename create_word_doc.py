@@ -2,12 +2,12 @@ import os
 from docx import Document
 from docx.shared import Cm, Pt
 from datetime import datetime
-from wordReader import WordReader
+from pfd_reader import PFDReader
 
 
-class CreateWordDoc(WordReader):
-    def __init__(self, input_document: str, output_directory_path: str, output_file_name: str):
-        super().__init__(input_document)
+class CreateWordDoc(PFDReader):
+    def __init__(self, path_to_pdf: str, output_directory_path: str, output_file_name: str):
+        super().__init__(path_to_pdf)
         self.doc = Document()
         self.output_path = output_directory_path
         self.output_file_name = output_file_name
@@ -58,13 +58,28 @@ class CreateWordDoc(WordReader):
         run.font.size = Pt(font_size)
 
     def _add_company_data(self):
-        company_name, person_name, street_address, city = self.get_company_data()
+        invoice_data, delivery_data = self.get_invoice_and_delivery_data()
+
+        company_name = invoice_data["c_name"]
+        owner_name = invoice_data["c_owner_name"]
+        address = invoice_data["c_street"]
+        street_number = invoice_data["c_street_number"]
+        zip_code = invoice_data["c_zip_code"]
+        city = invoice_data["c_city"]
+        country = invoice_data["c_country"]
+        tax_num = invoice_data["c_tax_num"]
+
         actual_date = datetime.now().date()
         format_date = actual_date.strftime('%d.%m.%Y')
         content = (f'{company_name}\t\t\t\t\t\t\t\t\t\t{format_date}\n'
-                   f'{person_name}\n'
-                   f'{street_address}\n'
-                   f'{city}')
+                   f'{owner_name}\n'
+                   f'{address}\n'
+                   f'{street_number}\n'
+                   f'{zip_code}\n'
+                   f'{city}\n'
+                   f'{country}\n'
+                   f'{tax_num}\n'
+                   )
         self._add_formatted_paragraph(content, self.font_name, self.font_size_9)
 
     def _invoice_num_delivery_date(self):
@@ -79,7 +94,7 @@ class CreateWordDoc(WordReader):
 
     def _invoice_table(self, fixed_rows: int = 4, columns: int = 4, brutto_price: float = 4.2,
                        shipping_cost: float = 4.75):
-        items_dict = self.create_dict_from_table()
+        items_dict = self.get_product_orders()
 
         total_rows = fixed_rows + len(items_dict)
         table = self.doc.add_table(rows=total_rows, cols=columns)
